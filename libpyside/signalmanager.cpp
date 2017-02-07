@@ -229,7 +229,9 @@ struct SignalManager::SignalManagerPrivate
             QList<GlobalReceiverV2*> values = m_globalReceivers->values();
             m_globalReceivers->clear();
             if (values.size()) {
+                Py_BEGIN_ALLOW_THREADS
                 qDeleteAll(values);
+                Py_END_ALLOW_THREADS
             }
         }
     }
@@ -576,6 +578,7 @@ static int callMethod(QObject* object, int id, void** args)
 
     if (method.methodType() == QMetaMethod::Signal) {
         // emit python signal
+        Shiboken::GilState gil;
         QMetaObject::activate(object, id, args);
     } else {
         Shiboken::GilState gil;
