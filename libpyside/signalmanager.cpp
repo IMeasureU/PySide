@@ -578,7 +578,6 @@ static int callMethod(QObject* object, int id, void** args)
 
     if (method.methodType() == QMetaMethod::Signal) {
         // emit python signal
-        Shiboken::GilState gil;
         QMetaObject::activate(object, id, args);
     } else {
         Shiboken::GilState gil;
